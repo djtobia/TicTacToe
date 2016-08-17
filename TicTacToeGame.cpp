@@ -1,11 +1,15 @@
 #pragma once
 
 #include "TicTacToeGame.h"
-
+#include "ConsoleControls.h"
 TTTGame::TTTGame()
 {
 	resetGame();
+
+
 }
+
+
 
 //resets all the variables in the game
 void TTTGame::resetGame()
@@ -24,6 +28,23 @@ void TTTGame::resetGame()
 	numOfPlayers = 0;
 	difficulty = EDiff::easy;
 
+}
+
+void TTTGame::resetGame(EDiff sameDiff, int players)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			board[i][j] = '\0';
+		}
+	}
+
+	firstMove = 0;
+	playerPiece = '\0';
+	compPiece = '\0';
+	numOfPlayers = players;
+	difficulty = sameDiff;
 }
 
 //promps the user for how many players, and sets the numOfPlayers variable
@@ -131,18 +152,34 @@ void TTTGame::flipCoin()
 	if (check == coin)
 	{
 		std::cout << "Awesome! You called " << answer << " and the coin was " << answer << ".\nYou will go first!" << std::endl;
+		firstMove = 0;
 	}
 	else
 	{
 		std::cout << "Sorry, you called " << answer << " and the coin was not " << answer << ".\nYou will go second!" << std::endl;
+		firstMove = 1;
 	}
 
-	firstMove = coin;
+	
+	setPieces(firstMove);
 	std::cout << "Press return to continue." << std::endl;
 	std::cin.ignore();
 	std::cin.get();
 }
 
+void TTTGame::setPieces(int firstMove)
+{
+	if (firstMove == 0)
+	{
+		playerPiece = 'X';
+		compPiece = 'O';
+	}
+	else
+	{
+		playerPiece = 'O';
+		compPiece = 'X';
+	}
+}
 //prints out the game board.
 void TTTGame::printBoard()
 {
@@ -160,4 +197,273 @@ void TTTGame::printBoard()
 				<< "   |   |   \n";
 
 
+}
+
+//calls all three functions to check for possible wins
+bool TTTGame::checkForWin()
+{
+	
+	if (checkForHoriz())
+		return true;
+	else if (checkForVerts())
+		return true;
+	else if (checkForDiags())
+		return true;
+	else
+		return false;
+
+}
+
+//checks all horizontal lines of the board for a win
+bool TTTGame::checkForHoriz()
+{
+
+	int xCount = 0, oCount = 0;
+	for (int i = 0; i < 3; i++)
+	{
+		xCount = 0;
+		oCount = 0;
+		for (int j = 0; j < 3; j++)
+		{
+			if (board[i][j] == 'X')
+			{
+				xCount++;
+			}
+			else if (board[i][j] == 'O')
+			{
+				oCount++;
+			}
+
+			if (xCount == 3 || oCount == 3)
+			{
+				return true;
+			}
+		}
+
+	}
+
+	return false;
+}
+
+//checks all verticle lines of the board for a win
+bool TTTGame::checkForVerts()
+{
+
+	int xCount = 0, oCount = 0;
+	for (int i = 0; i < 3; i++)
+	{
+		xCount = 0;
+		oCount = 0;
+		for (int j = 0; j < 3; j++)
+		{
+			if (board[j][i] == 'X')
+			{
+				xCount++;
+			}
+			else if (board[j][i] == 'O')
+			{
+				oCount++;
+			}
+
+			if (xCount == 3 || oCount == 3)
+			{
+				return true;
+			}
+		}
+
+	}
+
+	return false;
+}
+
+bool TTTGame::checkForValidPMove(COORD pos)
+{
+	if (board[pos.Y / 4][pos.X / 4] == '\0')
+	{
+		clearError();
+		return true;
+	}
+	else
+	{
+		printError();
+		return false;
+	}
+}
+
+bool TTTGame::checkForValidCMove(int xCord, int yCord)
+{
+	if (board[xCord][yCord] == '\0')
+	{
+		return true;
+	}
+	else
+		return false;
+}
+
+//checks both diagonals of the board for a win
+bool TTTGame::checkForDiags()
+{
+	int xCount = 0, oCount = 0;
+
+	for (int i = 0, j = 0; i < 3, j < 3; i++, j++)
+	{
+		
+		if (board[i][j] == 'X')
+		{
+			xCount++;
+		}
+		else if (board[i][j] == 'O')
+		{
+			oCount++;
+		}
+
+		if (xCount == 3 || oCount == 3)
+		{
+			return true;
+		}
+	}
+
+	xCount = 0;
+	oCount = 0;
+	for (int i = 0, j = 2; i < 3, j >= 0; i++, j--)
+	{
+		
+		if (board[i][j] == 'X')
+		{
+			xCount++;
+		}
+		else if (board[i][j] == 'O')
+		{
+			oCount++;
+		}
+
+		if (xCount == 3 || oCount == 3)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
+//checks if all squares of the board are taken, but there are no wins.
+bool TTTGame::checkForStalemate()
+{
+
+	int xCount = 0, oCount = 0;
+	for (int i = 0; i < 3; i++)
+	{
+		
+		for (int j = 0; j < 3; j++)
+		{
+			if (board[i][j] == 'X')
+			{
+				xCount++;
+			}
+			else if (board[i][j] == 'O')
+			{
+				oCount++;
+			}
+
+			if (xCount + oCount == 9)
+			{
+				return true;
+			}
+		}
+
+	}
+
+	return false;
+}
+
+void TTTGame::playerMove()
+{
+	COORD pos;
+	resetCursor();
+	bool valid = false;;
+	while (!valid)
+	{
+		pos = moveCursor();
+		valid = checkForValidPMove(pos);
+	}
+
+	int xCord = pos.Y / 4, yCord = pos.X / 4;
+	board[xCord][yCord] = playerPiece;
+	printPiece(pos, playerPiece);
+}
+
+//check for valid computer move, if valid set it on the board and print it in its right coordinate.
+void TTTGame::compMove()
+{
+	bool valid = false;
+	int xCord = 0, yCord = 0;
+	COORD position;
+	srand(time(NULL));
+	while (!valid)
+	{
+		xCord = rand() % 3;
+		yCord = rand() % 3;
+		if (checkForValidCMove(xCord, yCord))
+		{
+			valid = true;
+		}
+	}
+	
+	board[xCord][yCord] = compPiece;
+	if (xCord == 0)
+	{
+		position.Y = 1;
+	}
+	else if (xCord == 1)
+	{
+		position.Y = 5;
+	}
+	else if (xCord = 2)
+	{
+		position.Y = 9;
+	}
+
+	if (yCord == 0)
+	{
+		position.X = 1;
+	}
+	else if (yCord == 1)
+	{
+		position.X = 5;
+	}
+	else if (yCord == 2)
+	{
+		position.X = 9;
+	}
+	
+	printPiece(position, compPiece);
+}
+
+int TTTGame::getFirstMove()
+{
+	return firstMove;
+}
+
+int TTTGame::getPlayers()
+{
+	return numOfPlayers;
+}
+
+EDiff TTTGame::getDifficulty()
+{
+	return difficulty;
+}
+
+void TTTGame::win()
+{
+	printWin();
+}
+
+void TTTGame::lose()
+{
+	printLose();
+}
+
+void TTTGame::stalemate()
+{
+	printStalemate();
 }
