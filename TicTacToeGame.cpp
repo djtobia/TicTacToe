@@ -2,11 +2,10 @@
 
 #include "TicTacToeGame.h"
 #include "ConsoleControls.h"
+
 TTTGame::TTTGame()
 {
 	resetGame();
-
-
 }
 
 
@@ -48,7 +47,7 @@ void TTTGame::resetGame(EDiff sameDiff, int players)
 }
 
 //promps the user for how many players, and sets the numOfPlayers variable
-void TTTGame::howManyPlayers()
+int TTTGame::howManyPlayers()
 {
 	
 	char answer = 0;
@@ -74,6 +73,7 @@ void TTTGame::howManyPlayers()
 	}
 	
 	numOfPlayers = (int)answer - 48;
+	return numOfPlayers;
 }
 
 //prompts the user for which difficulty they want, and sets the difficulty variable
@@ -276,6 +276,7 @@ bool TTTGame::checkForVerts()
 	return false;
 }
 
+//checks for a valid player move
 bool TTTGame::checkForValidPMove(COORD pos)
 {
 	if (board[pos.Y / 4][pos.X / 4] == '\0')
@@ -290,6 +291,7 @@ bool TTTGame::checkForValidPMove(COORD pos)
 	}
 }
 
+//checks for a valid computer move
 bool TTTGame::checkForValidCMove(int xCord, int yCord)
 {
 	if (board[xCord][yCord] == '\0')
@@ -375,6 +377,7 @@ bool TTTGame::checkForStalemate()
 	return false;
 }
 
+//handles all aspects of player movement and placement
 void TTTGame::playerMove()
 {
 	COORD pos;
@@ -438,31 +441,93 @@ void TTTGame::compMove()
 	printPiece(position, compPiece);
 }
 
+//returns firstMove variable
 int TTTGame::getFirstMove()
 {
 	return firstMove;
 }
 
+//returns numOfPlayers variable
 int TTTGame::getPlayers()
 {
 	return numOfPlayers;
 }
 
+//prints and handles menu for game
+void TTTGame::menu()
+{
+	int players = 0, option = 0;
+	bool diffFlag = false, menuFlag = false;
+	std::string input = "";
+	while (!menuFlag)
+	{
+		std::cout << "\n1. Number of Players.\n\n"
+			<< "2. Set difficulty.\n\n"
+			<< "3. Play game. (Only available if both 1 and 2 are complete, or if there is 2 players)" << std::endl;
+		
+		std::cin >> input;
+		if (input.compare("1") == 0)
+		{
+			option = 1;
+		}
+		else if (input.compare("2") == 0)
+		{
+			option = 2;
+		}
+		else if (input.compare("3") == 0)
+		{
+			option = 3;
+		}
+		else
+		{
+			std::cout << "Error, invalid input. Enter 1, 2, or 3." << std::endl;
+		}
+		switch (option)
+		{
+		case 1:
+			players = howManyPlayers();
+			break;
+		case 2:
+			setDifficulty();
+			diffFlag = true;
+			break;
+		case 3:
+			if (players == 2)
+			{
+				return;
+			}
+			else if (players == 1 && diffFlag == true)
+			{
+				return;
+			}
+			else
+			{
+				std::cout << "Error, you must set the amount of players and the difficulty for 1 player mode first." << std::endl;
+			}
+			break;
+		}
+	}
+}
+
+//returns diffculty variable
 EDiff TTTGame::getDifficulty()
 {
 	return difficulty;
 }
 
+//prints the win prompt
 void TTTGame::win()
 {
 	printWin();
 }
 
+//prints the lose prompt
 void TTTGame::lose()
 {
 	printLose();
 }
 
+//prints the stalemate prompt
 void TTTGame::stalemate()
 {
 	printStalemate();

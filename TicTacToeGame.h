@@ -23,8 +23,6 @@ public:
 	TTTGame();
 	void resetGame();
 	void resetGame(EDiff, int);
-	void howManyPlayers();
-	void setDifficulty();
 	void flipCoin();
 	void printBoard();
 	bool checkForWin();
@@ -38,6 +36,7 @@ public:
 
 	EDiff getDifficulty();
 	int getPlayers();
+	void menu();
 private:
 	char board[3][3];
 	int firstMove;
@@ -52,5 +51,7 @@ private:
 	bool checkForValidPMove(COORD);
 	bool checkForValidCMove(int, int);
 	void setPieces(int);
+	int howManyPlayers();
+	void setDifficulty();
 
 };

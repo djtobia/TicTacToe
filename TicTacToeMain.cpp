@@ -21,8 +21,7 @@ int main(int argc, char** argv)
 {
 	
 	printIntro();
-	Game.howManyPlayers();
-	Game.setDifficulty();
+	Game.menu();
 
 	bool again = false;
 	while (!again)
