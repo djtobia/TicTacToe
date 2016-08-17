@@ -1,9 +1,3 @@
 ﻿  TicTacToeGame.cpp
-c:\users\djtob\desktop\tic tac toe game\tictactoe\tictactoe\tictactoegame.cpp(91): warning C4018: '<': signed/unsigned mismatch
-c:\users\djtob\desktop\tic tac toe game\tictactoe\tictactoe\tictactoegame.cpp(122): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-c:\users\djtob\desktop\tic tac toe game\tictactoe\tictactoe\tictactoegame.cpp(131): warning C4018: '<': signed/unsigned mismatch
-c:\users\djtob\desktop\tic tac toe game\tictactoe\tictactoe\tictactoegame.cpp(429): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-  ConsoleControls.cpp
-  Generating Code...
   TicTacToe.vcxproj -> C:\Users\djtob\Desktop\Tic Tac Toe Game\TicTacToe\Debug\TicTacToe.exe
   TicTacToe.vcxproj -> C:\Users\djtob\Desktop\Tic Tac Toe Game\TicTacToe\Debug\TicTacToe.pdb (Full PDB)

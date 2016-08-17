@@ -194,6 +194,7 @@ void playGame()
 	}
 }
 
+//prompts the user to play again. Checks for valid input. Returns false if they do want to play again, or true if they do not.
 bool playAgain()
 {
 	bool flag = false;

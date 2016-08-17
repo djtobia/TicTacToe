@@ -12,6 +12,13 @@
 #include <time.h>
 #include <random>
 
+//struct for computer movements
+struct CompCords {
+	int xCord;
+	int yCord;
+};
+
+//enumeration for difficulties
 enum class EDiff {
 	easy,
 	medium,
@@ -58,10 +65,20 @@ private:
 	bool checkForVerts();
 	bool checkForValidPMove(COORD);
 	bool checkForValidCMove(int, int);
+	bool checkForStalemateMove();
 	void setPieces(int);
 	int howManyPlayers();
 	void setDifficulty();
 	void setNames();
 	void clearError();
 	void printError();
+	CompCords easyCompMove();
+	CompCords mediumCompMove();
+	CompCords hardCompMove();
+	CompCords checkForBlock();
+	CompCords checkForWinningMove();
+	CompCords checkForHorizMove(EDiff);
+	CompCords checkForVertMove(EDiff);
+	CompCords checkForDiagMove(EDiff);
+	CompCords moveToStalemate();
 };
