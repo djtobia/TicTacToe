@@ -1,5 +1,6 @@
 #include "ConsoleControls.h"
 #include "TicTacToeGame.h"
+
 void resetCursor()
 {
 	HANDLE stdH = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -155,6 +156,16 @@ void clearConsole()
 	SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
+void setConsoleForWin()
+{
+	HANDLE stdH = GetStdHandle(STD_OUTPUT_HANDLE);
+	COORD pos;
+	clearError();
+	pos.X = 0;
+	pos.Y = 13;
+	SetConsoleCursorPosition(stdH, pos);
+	
+}
 void printWin()
 {
 	HANDLE stdH = GetStdHandle(STD_OUTPUT_HANDLE);

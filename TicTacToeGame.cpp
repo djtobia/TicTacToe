@@ -68,6 +68,7 @@ int TTTGame::howManyPlayers()
 		else if (answer == 50)
 		{
 			std::cout << "It will be you vs. your friend." << std::endl;
+			setNames();
 			check = true;
 		}
 	}
@@ -169,15 +170,31 @@ void TTTGame::flipCoin()
 
 void TTTGame::setPieces(int firstMove)
 {
-	if (firstMove == 0)
+	if (numOfPlayers == 1)
 	{
-		playerPiece = 'X';
-		compPiece = 'O';
+		if (firstMove == 0)
+		{
+			playerPiece = 'X';
+			compPiece = 'O';
+		}
+		else
+		{
+			playerPiece = 'O';
+			compPiece = 'X';
+		}
 	}
 	else
 	{
-		playerPiece = 'O';
-		compPiece = 'X';
+		if (firstMove == 0)
+		{
+			playerPiece = 'X';
+			playerTwoPiece = 'O';
+		}
+		else
+		{
+			playerPiece = 'O';
+			playerTwoPiece = 'X';
+		}
 	}
 }
 //prints out the game board.
@@ -378,7 +395,7 @@ bool TTTGame::checkForStalemate()
 }
 
 //handles all aspects of player movement and placement
-void TTTGame::playerMove()
+void TTTGame::playerMove(int move)
 {
 	COORD pos;
 	resetCursor();
@@ -391,7 +408,16 @@ void TTTGame::playerMove()
 
 	int xCord = pos.Y / 4, yCord = pos.X / 4;
 	board[xCord][yCord] = playerPiece;
-	printPiece(pos, playerPiece);
+	if (move == 0)
+	{
+		printPiece(pos, playerPiece);
+		board[xCord][yCord] = playerPiece;
+	}
+	else
+	{
+		board[xCord][yCord] = playerTwoPiece;
+		printPiece(pos, playerTwoPiece);
+	}
 }
 
 //check for valid computer move, if valid set it on the board and print it in its right coordinate.
@@ -445,6 +471,20 @@ void TTTGame::compMove()
 int TTTGame::getFirstMove()
 {
 	return firstMove;
+}
+
+//prints out the win statement for player one in two player game
+void TTTGame::playerOneWin()
+{
+	setConsoleForWin();
+	std::cout << playerOneName << " wins!" << std::endl;
+}
+
+//prints out win statement for player two in two player game
+void TTTGame::playerTwoWin()
+{
+	setConsoleForWin();
+	std::cout << playerTwoName << " wins!" << std::endl;
 }
 
 //returns numOfPlayers variable
@@ -531,4 +571,23 @@ void TTTGame::lose()
 void TTTGame::stalemate()
 {
 	printStalemate();
+}
+
+//sets the names of player one and player two for two player game
+void TTTGame::setNames()
+{
+	std::cout << "Enter player number one's name." << std::endl;
+	std::cin >> playerOneName;
+	std::cout << "Enter player number two's name." << std::endl;
+	std::cin >> playerTwoName;
+}
+
+std::string TTTGame::getPlayerOne()
+{
+	return playerOneName;
+}
+
+std::string TTTGame::getPlayerTwo()
+{
+	return playerTwoName;
 }

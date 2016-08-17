@@ -31,3 +31,4 @@ void printLose();
 void printStalemate();
 void printPiece(COORD, char);
 COORD moveCursor();
+void setConsoleForWin();

@@ -27,9 +27,11 @@ public:
 	void printBoard();
 	bool checkForWin();
 	bool checkForStalemate();
-	void playerMove();
+	void playerMove(int);
 	void compMove();
 	int getFirstMove();
+	void playerOneWin();
+	void playerTwoWin();
 	void win();
 	void lose();
 	void stalemate();
@@ -37,13 +39,19 @@ public:
 	EDiff getDifficulty();
 	int getPlayers();
 	void menu();
+	std::string getPlayerOne();
+	std::string getPlayerTwo();
 private:
 	char board[3][3];
 	int firstMove;
 	int numOfPlayers;
 	char playerPiece;
+	char playerTwoPiece;
 	char compPiece;
 	EDiff difficulty;
+	std::string playerOneName;
+	std::string playerTwoName;
+
 
 	bool checkForDiags();
 	bool checkForHoriz();
@@ -53,5 +61,5 @@ private:
 	void setPieces(int);
 	int howManyPlayers();
 	void setDifficulty();
-
+	void setNames();
 };
