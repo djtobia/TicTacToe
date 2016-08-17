@@ -476,14 +476,14 @@ int TTTGame::getFirstMove()
 //prints out the win statement for player one in two player game
 void TTTGame::playerOneWin()
 {
-	setConsoleForWin();
+	setConsoleForStatements();
 	std::cout << playerOneName << " wins!" << std::endl;
 }
 
 //prints out win statement for player two in two player game
 void TTTGame::playerTwoWin()
 {
-	setConsoleForWin();
+	setConsoleForStatements();
 	std::cout << playerTwoName << " wins!" << std::endl;
 }
 
@@ -558,19 +558,22 @@ EDiff TTTGame::getDifficulty()
 //prints the win prompt
 void TTTGame::win()
 {
-	printWin();
+	setConsoleForStatements();
+	std::cout << "Congratulations, you won!" << std::endl;
 }
 
 //prints the lose prompt
 void TTTGame::lose()
 {
-	printLose();
+	setConsoleForStatements();
+	std::cout << "I'm sorry, you lost!" << std::endl;
 }
 
 //prints the stalemate prompt
 void TTTGame::stalemate()
 {
-	printStalemate();
+	setConsoleForStatements();
+	std::cout << "This game was a stalemate!" << std::endl;
 }
 
 //sets the names of player one and player two for two player game
@@ -582,12 +585,30 @@ void TTTGame::setNames()
 	std::cin >> playerTwoName;
 }
 
+//returns playerOneName variable
 std::string TTTGame::getPlayerOne()
 {
 	return playerOneName;
 }
 
+//returns playerTwoName variable
 std::string TTTGame::getPlayerTwo()
 {
 	return playerTwoName;
+}
+
+//clears any error messages
+void TTTGame::clearError()
+{
+	setConsoleForStatements();
+	std::cout << "                                  " << std::endl;
+	resetCursor();
+}
+
+//prints out an error message when a piece is already in that coordinate
+void TTTGame::printError()
+{
+	setConsoleForStatements();
+	std::cout << "Error, piece already placed there." << std::endl;
+	resetCursor();
 }

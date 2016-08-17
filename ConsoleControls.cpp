@@ -1,6 +1,7 @@
 #include "ConsoleControls.h"
 #include "TicTacToeGame.h"
 
+//resets the cursor to position (1,1)
 void resetCursor()
 {
 	HANDLE stdH = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -10,30 +11,7 @@ void resetCursor()
 	SetConsoleCursorPosition(stdH, pos);
 }
 
-void printError()
-{
-	HANDLE stdH = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD pos;
-	pos.X = 0;
-	pos.Y = 13;
-
-	SetConsoleCursorPosition(stdH, pos);
-	std::cout << "Error, Piece already placed there." << std::endl;
-	resetCursor();
-}
-
-void clearError()
-{
-	HANDLE stdH = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD pos;
-	pos.X = 0;
-	pos.Y = 13;
-
-	SetConsoleCursorPosition(stdH, pos);
-	std::cout << "                                  " << std::endl;
-	resetCursor();
-}
-
+//the only function that prints for this header. Sets the cursor and prints the piece for the current move
 void printPiece(COORD Position, char piece)
 {
 	HANDLE stdH = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -65,6 +43,7 @@ void printPiece(COORD Position, char piece)
 	resetCursor();
 }
 
+//allows for user to move cursor around the console using the arrow keys
 COORD moveCursor()
 {
 	HANDLE stdH = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -119,6 +98,7 @@ COORD moveCursor()
 	return pos;
 }
 
+//clears the console, taken directly from microsoft bsdn
 void clearConsole()
 {
 	HANDLE                     hStdOut;
@@ -156,45 +136,13 @@ void clearConsole()
 	SetConsoleCursorPosition(hStdOut, homeCoords);
 }
 
-void setConsoleForWin()
+//sets the cursor at position (0,13) where statements and errors are printed.
+void setConsoleForStatements()
 {
 	HANDLE stdH = GetStdHandle(STD_OUTPUT_HANDLE);
 	COORD pos;
-	clearError();
 	pos.X = 0;
 	pos.Y = 13;
 	SetConsoleCursorPosition(stdH, pos);
 	
-}
-void printWin()
-{
-	HANDLE stdH = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD pos;
-	clearError();
-	pos.X = 0;
-	pos.Y = 13;
-	SetConsoleCursorPosition(stdH, pos);
-	std::cout << "Congratulations, you won!" << std::endl;
-}
-
-void printLose()
-{
-	HANDLE stdH = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD pos;
-	clearError();
-	pos.X = 0;
-	pos.Y = 13;
-	SetConsoleCursorPosition(stdH, pos);
-	std::cout << "I'm sorry, you lost!" << std::endl;
-}
-
-void printStalemate()
-{
-	HANDLE stdH = GetStdHandle(STD_OUTPUT_HANDLE);
-	COORD pos;
-	clearError();
-	pos.X = 0;
-	pos.Y = 13;
-	SetConsoleCursorPosition(stdH, pos);
-	std::cout << "This game was a stalemate!" << std::endl;
 }

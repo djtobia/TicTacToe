@@ -12,23 +12,15 @@
 #include <string>
 #include <iostream>
 
-
+//definitions for keyboard presses
 #define LEFT_ARROW 75
 #define RIGHT_ARROW 77
 #define UP_ARROW 72
 #define DOWN_ARROW 80
 #define SPACE 32
 
-
-
-
 void clearConsole();
 void resetCursor();
-void printError();
-void clearError();
-void printWin();
-void printLose();
-void printStalemate();
 void printPiece(COORD, char);
 COORD moveCursor();
-void setConsoleForWin();
+void setConsoleForStatements();

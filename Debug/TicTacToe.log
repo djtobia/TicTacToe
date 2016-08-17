@@ -5,10 +5,5 @@ c:\users\djtob\desktop\tic tac toe game\tictactoe\tictactoe\tictactoegame.cpp(13
 c:\users\djtob\desktop\tic tac toe game\tictactoe\tictactoe\tictactoegame.cpp(429): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
   ConsoleControls.cpp
   Generating Code...
-  Compiling...
-  TicTacToeMain.cpp
-c:\users\djtob\desktop\tic tac toe game\tictactoe\tictactoe\tictactoemain.cpp(207): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-c:\users\djtob\desktop\tic tac toe game\tictactoe\tictactoe\tictactoemain.cpp(225): warning C4715: 'playAgain': not all control paths return a value
   TicTacToe.vcxproj -> C:\Users\djtob\Desktop\Tic Tac Toe Game\TicTacToe\Debug\TicTacToe.exe
   TicTacToe.vcxproj -> C:\Users\djtob\Desktop\Tic Tac Toe Game\TicTacToe\Debug\TicTacToe.pdb (Full PDB)

@@ -62,4 +62,6 @@ private:
 	int howManyPlayers();
 	void setDifficulty();
 	void setNames();
+	void clearError();
+	void printError();
 };
