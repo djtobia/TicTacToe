@@ -2,6 +2,8 @@
 	Author: Dylan Tobia
 	File: ConsoleControls.h
 	Purpose: Header file for ConsoleControls.cpp, all functions have to do with the cursor position and movement
+			The only function that actually writes anything to the console is the printPiece function, which was just easier
+			to have it print in this function, instead of having to move back and forth over and over again.
 */
 
 #pragma once

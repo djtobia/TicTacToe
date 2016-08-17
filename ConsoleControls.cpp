@@ -1,3 +1,4 @@
+#pragma once
 #include "ConsoleControls.h"
 #include "TicTacToeGame.h"
 
