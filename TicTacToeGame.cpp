@@ -175,6 +175,7 @@ void TTTGame::flipCoin()
 	std::cin.get();
 }
 
+//sets both the computer and player pieces
 void TTTGame::setPieces(int firstMove)
 {
 	if (numOfPlayers == 1)
@@ -204,6 +205,7 @@ void TTTGame::setPieces(int firstMove)
 		}
 	}
 }
+
 //prints out the game board.
 void TTTGame::printBoard()
 {
@@ -431,9 +433,9 @@ void TTTGame::playerMove(int move)
 void TTTGame::compMove()
 {
 	bool valid = false;
-	CompCords cords;
-	cords.xCord = 0;
-	cords.yCord = 0;
+	COORD cords;
+	cords.X = 0;
+	cords.Y= 0;
 	COORD position;
 
 	srand((unsigned int)time(NULL));
@@ -453,7 +455,7 @@ void TTTGame::compMove()
 			cords = easyCompMove();
 		}
 		
-		if (checkForValidCMove(cords.xCord, cords.yCord))
+		if (checkForValidCMove(cords.X, cords.Y))
 		{
 			valid = true;
 		}
@@ -464,29 +466,29 @@ void TTTGame::compMove()
 		}
 	}
 	
-	board[cords.xCord][cords.yCord] = compPiece;
-	if (cords.xCord == 0)
+	board[cords.X][cords.Y] = compPiece;
+	if (cords.X == 0)
 	{
 		position.Y = 1;
 	}
-	else if (cords.xCord == 1)
+	else if (cords.X == 1)
 	{
 		position.Y = 5;
 	}
-	else if (cords.xCord = 2)
+	else if (cords.X = 2)
 	{
 		position.Y = 9;
 	}
 
-	if (cords.yCord == 0)
+	if (cords.Y == 0)
 	{
 		position.X = 1;
 	}
-	else if (cords.yCord == 1)
+	else if (cords.Y == 1)
 	{
 		position.X = 5;
 	}
-	else if (cords.yCord == 2)
+	else if (cords.Y == 2)
 	{
 		position.X = 9;
 	}
@@ -520,17 +522,17 @@ bool TTTGame::checkForStalemateMove()
 }
 
 //finds the coordinate of the stalemate space for the computer
-CompCords TTTGame::moveToStalemate()
+COORD TTTGame::moveToStalemate()
 {
-	CompCords pos;
+	COORD pos;
 	for (int i = 0; i < 3; i++)
 	{
 		for (int j = 0; j < 3; j++)
 		{
 			if (board[i][j] == '\0')
 			{
-				pos.xCord = i;
-				pos.yCord = j;
+				pos.X = i;
+				pos.Y = j;
 			}
 		}
 	}
@@ -541,23 +543,23 @@ CompCords TTTGame::moveToStalemate()
 }
 
 //makes computer move randomly
-CompCords TTTGame::easyCompMove()
+COORD TTTGame::easyCompMove()
 {
-	CompCords pos;
+	COORD pos;
 	srand((unsigned int)time(NULL));
 
-	pos.xCord = rand() % 3;
-	pos.yCord = rand() % 3;
+	pos.X = rand() % 3;
+	pos.Y = rand() % 3;
 	return pos;
 }
 
 //computer will try to block a win, otherwise will move randomly
-CompCords TTTGame::mediumCompMove()
+COORD TTTGame::mediumCompMove()
 {
-	CompCords pos;
+	COORD pos;
 	//check for block, if none, call easyCompMove
 	pos = checkForBlock();
-	if(pos.xCord == -1)
+	if(pos.X == -1)
 	{ 
 		pos = easyCompMove();
 
@@ -567,15 +569,15 @@ CompCords TTTGame::mediumCompMove()
 }
 
 //computer will try to WIN, if it cant win it will try to block, if it cant block, will move randomly
-CompCords TTTGame::hardCompMove()
+COORD TTTGame::hardCompMove()
 {
-	CompCords pos;
+	COORD pos;
 	//checkForWin, if none, checkForBlock, if none, call easyCompMove
 	pos = checkForWinningMove();
-		if(pos.xCord == -1)
+		if(pos.X == -1)
 		{
 			pos = checkForBlock();
-			if(pos.xCord == -1)
+			if(pos.X == -1)
 			{
 				pos = easyCompMove();
 			}
@@ -585,15 +587,15 @@ CompCords TTTGame::hardCompMove()
 }
 
 //checks for horizontal, then verticle, then diagonal blocks. If there isnt one, returns (-1,-1)
-CompCords TTTGame::checkForBlock()
+COORD TTTGame::checkForBlock()
 {
-	CompCords pos;
+	COORD pos;
 	EDiff specialCase = EDiff::medium;
 	pos = checkForHorizMove(specialCase);
-	if (pos.xCord == -1)
+	if (pos.X == -1)
 	{
 		pos = checkForVertMove(specialCase);
-		if (pos.xCord == -1)
+		if (pos.X == -1)
 		{
 			pos = checkForDiagMove(specialCase);
 		}
@@ -603,16 +605,16 @@ CompCords TTTGame::checkForBlock()
 }
 
 //steps through all of the different move functions, if there is no win, returns (-1,-1)
-CompCords TTTGame::checkForWinningMove()
+COORD TTTGame::checkForWinningMove()
 {
 	EDiff specialCase = EDiff::hard;
-	CompCords pos;
+	COORD pos;
 	
 	pos = checkForHorizMove(specialCase);
-	if (pos.xCord == -1)
+	if (pos.X == -1)
 	{			
 		pos = checkForVertMove(specialCase);
-		if (pos.xCord == -1)
+		if (pos.X == -1)
 		{
 			pos = checkForDiagMove(specialCase);
 		}
@@ -623,9 +625,9 @@ CompCords TTTGame::checkForWinningMove()
 }
 
 //steps through the board horizontally, if the playerpiece count ever equals 2, checks if it can block or win (depeniding on specialCase). If it cannot, returns (-1,-1)
-CompCords TTTGame::checkForHorizMove(EDiff specialCase)
+COORD TTTGame::checkForHorizMove(EDiff specialCase)
 {
-	CompCords pos;
+	COORD pos;
 	int playerCount = 0, compCount = 0;
 	//steps through rows
 	for (int i = 0; i < 3; i++)
@@ -654,8 +656,8 @@ CompCords TTTGame::checkForHorizMove(EDiff specialCase)
 					{
 						if (board[i][k] == '\0')
 						{
-							pos.xCord = i;
-							pos.yCord = k;
+							pos.X = i;
+							pos.Y = k;
 							return pos;
 						}
 					}
@@ -669,8 +671,8 @@ CompCords TTTGame::checkForHorizMove(EDiff specialCase)
 					{
 						if (board[i][k] == '\0')
 						{
-							pos.xCord = i;
-							pos.yCord = k;
+							pos.X = i;
+							pos.Y = k;
 							return pos;
 						}
 					}
@@ -680,15 +682,15 @@ CompCords TTTGame::checkForHorizMove(EDiff specialCase)
 		}
 	}
 	//if there is no block or winning move to make, sets the cords to (-1,-1), and returns them
-	pos.xCord = -1;
-	pos.yCord = -1;
+	pos.X = -1;
+	pos.Y = -1;
 	return pos;
 }
 
 //checks for verticle blocks/wins (depending on specialCase). if there is one, returns that coordinate, if not returns (-1,-1)
-CompCords TTTGame::checkForVertMove(EDiff specialCase)
+COORD TTTGame::checkForVertMove(EDiff specialCase)
 {
-	CompCords pos;
+	COORD pos;
 	int playerCount = 0, compCount = 0;
 	//steps through rows
 	for (int i = 0; i < 3; i++)
@@ -717,8 +719,8 @@ CompCords TTTGame::checkForVertMove(EDiff specialCase)
 					{
 						if (board[k][i] == '\0')
 						{
-							pos.xCord = k;
-							pos.yCord = i;
+							pos.X = k;
+							pos.Y = i;
 							return pos;
 						}
 					}
@@ -732,8 +734,8 @@ CompCords TTTGame::checkForVertMove(EDiff specialCase)
 					{
 						if (board[k][i] == '\0')
 						{
-							pos.xCord = k;
-							pos.yCord = i;
+							pos.X = k;
+							pos.Y = i;
 							return pos;
 						}
 					}
@@ -743,15 +745,15 @@ CompCords TTTGame::checkForVertMove(EDiff specialCase)
 		}
 	}
 	//if there is no block or winning move to make, sets the cords to (-1,-1), and returns them
-	pos.xCord = -1;
-	pos.yCord = -1;
+	pos.X = -1;
+	pos.Y = -1;
 	return pos;
 }
 
 //checks for diagonal blocks/wins (depending on specialCase). if there is one, returns that coordinate, if not returns (-1,-1)
-CompCords TTTGame::checkForDiagMove(EDiff specialCase)
+COORD TTTGame::checkForDiagMove(EDiff specialCase)
 {
-	CompCords pos;
+	COORD pos;
 	int playerCount = 0, compCount = 0;
 	for (int i = 0, j = 0; i < 3; i++, j++)
 	{
@@ -772,8 +774,8 @@ CompCords TTTGame::checkForDiagMove(EDiff specialCase)
 				{
 					if (board[k][l] == '\0')
 					{
-						pos.xCord = k;
-						pos.yCord = l;
+						pos.X = k;
+						pos.Y = l;
 						return pos;
 					}
 				}
@@ -787,8 +789,8 @@ CompCords TTTGame::checkForDiagMove(EDiff specialCase)
 				{
 					if (board[k][l] == '\0')
 					{
-						pos.xCord = k;
-						pos.yCord = l;
+						pos.X= k;
+						pos.Y = l;
 						return pos;
 					}
 				}
@@ -818,8 +820,8 @@ CompCords TTTGame::checkForDiagMove(EDiff specialCase)
 				{
 					if (board[k][l] == '\0')
 					{
-						pos.xCord = k;
-						pos.yCord = l;
+						pos.X = k;
+						pos.Y = l;
 						return pos;
 					}
 				}
@@ -833,16 +835,16 @@ CompCords TTTGame::checkForDiagMove(EDiff specialCase)
 				{
 					if (board[k][l] == '\0')
 					{
-						pos.xCord = k;
-						pos.yCord = l;
+						pos.X = k;
+						pos.Y = l;
 						return pos;
 					}
 				}
 			}
 		}
 	}
-	pos.xCord = -1;
-	pos.yCord = -1;
+	pos.X = -1;
+	pos.Y = -1;
 	return pos;
 }
 //returns firstMove variable
@@ -881,7 +883,8 @@ void TTTGame::menu()
 	{
 		std::cout << "\n1. Number of Players.\n\n"
 			<< "2. Set difficulty.\n\n"
-			<< "3. Play game. (Only available if both 1 and 2 are complete, or if there is 2 players)" << std::endl;
+			<< "3. Play game. (Only available if both 1 and 2 are complete, or if there is 2 players)\n\n"
+			<< "4. How to play." << std::endl;
 		
 		std::cin >> input;
 		if (input.compare("1") == 0)
@@ -896,9 +899,13 @@ void TTTGame::menu()
 		{
 			option = 3;
 		}
+		else if (input.compare("4") == 0)
+		{
+			option = 4;
+		}
 		else
 		{
-			std::cout << "Error, invalid input. Enter 1, 2, or 3." << std::endl;
+			std::cout << "Error, invalid input. Enter 1, 2, 3, or 4." << std::endl;
 		}
 		switch (option)
 		{
@@ -923,8 +930,17 @@ void TTTGame::menu()
 				std::cout << "Error, you must set the amount of players and the difficulty for 1 player mode first." << std::endl;
 			}
 			break;
+		case 4:
+			printHowTo();
 		}
 	}
+}
+
+void TTTGame::printHowTo()
+{
+	std::cout << "\nAfter selecting 1 or 2 player, and your difficulty (if playing 1 player), use the arrow keys to move"
+		<< "\nthe cursor around the screen until you find a position you would like to play, then press the spacebar.\n"
+		<< "In 2 player mode, player 1 will always choose heads or tails for the coin flip.\n" << std::endl;
 }
 
 //returns diffculty variable

@@ -12,11 +12,7 @@
 #include <time.h>
 #include <random>
 
-//struct for computer movements
-struct CompCords {
-	int xCord;
-	int yCord;
-};
+
 
 //enumeration for difficulties
 enum class EDiff {
@@ -72,13 +68,14 @@ private:
 	void setNames();
 	void clearError();
 	void printError();
-	CompCords easyCompMove();
-	CompCords mediumCompMove();
-	CompCords hardCompMove();
-	CompCords checkForBlock();
-	CompCords checkForWinningMove();
-	CompCords checkForHorizMove(EDiff);
-	CompCords checkForVertMove(EDiff);
-	CompCords checkForDiagMove(EDiff);
-	CompCords moveToStalemate();
+	void printHowTo();
+	COORD easyCompMove();
+	COORD mediumCompMove();
+	COORD hardCompMove();
+	COORD checkForBlock();
+	COORD checkForWinningMove();
+	COORD checkForHorizMove(EDiff);
+	COORD checkForVertMove(EDiff);
+	COORD checkForDiagMove(EDiff);
+	COORD moveToStalemate();
 };
