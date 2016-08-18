@@ -140,11 +140,13 @@ void TTTGame::flipCoin()
 
 		if (answer.compare("heads") == 0 || answer.compare("h") == 0)
 		{
+			answer = "heads";
 			check = 0;
 			flipped = true;
 		}
 		else if (answer.compare("tails") == 0 || answer.compare("t") == 0)
 		{
+			answer = "tails";
 			check = 1;
 			flipped = true;
 		}
