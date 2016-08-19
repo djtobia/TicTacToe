@@ -54,7 +54,7 @@ void TTTGame::resetGame(EDiff sameDiff, int players)
 //promps the user for how many players, and sets the numOfPlayers variable
 int TTTGame::howManyPlayers()
 {
-	
+
 	char answer = 0;
 	bool check = false;
 	while (!check)
@@ -77,7 +77,7 @@ int TTTGame::howManyPlayers()
 			check = true;
 		}
 	}
-	
+
 	numOfPlayers = (int)answer - 48;
 	return numOfPlayers;
 }
@@ -85,19 +85,19 @@ int TTTGame::howManyPlayers()
 //prompts the user for which difficulty they want, and sets the difficulty variable
 void TTTGame::setDifficulty()
 {
-	
+
 	std::string answer = "";
 	bool check = false;
 	while (!check)
 	{
 		std::cout << "Which difficulty would you like, easy, medium, or hard?" << std::endl;
 		std::cin >> answer;
-		//convert answer to lowercase.
+        //convert answer to lowercase.
 		for (size_t i = 0; i < answer.length(); i++)
 		{
 			answer[i] = tolower(answer[i]);
 		}
-		//check for what was input
+        //check for what was input
 		if (answer.compare("easy") == 0)
 		{
 			difficulty = EDiff::easy;
@@ -118,7 +118,7 @@ void TTTGame::setDifficulty()
 			std::cout << "Error, you have entered an invalid answer. Please try again." << std::endl;
 		}
 	}
-	
+
 }
 
 //uses a random number between 0 and 1 to "flip" a coin. User chooses heads or tails, if num is 0, heads was flipped etc. If the user guesses correctly, they go first.
@@ -132,7 +132,7 @@ void TTTGame::flipCoin()
 	while (!flipped)
 	{
 		std::cin >> answer;
-		//convert answer to lowercase.
+        //convert answer to lowercase.
 		for (size_t i = 0; i < answer.length(); i++)
 		{
 			answer[i] = tolower(answer[i]);
@@ -168,7 +168,7 @@ void TTTGame::flipCoin()
 		firstMove = 1;
 	}
 
-	
+
 	setPieces(firstMove);
 	std::cout << "Press return to continue." << std::endl;
 	std::cin.ignore();
@@ -209,8 +209,8 @@ void TTTGame::setPieces(int firstMove)
 //prints out the game board.
 void TTTGame::printBoard()
 {
-	//print out board
-	std::cout	<< "   |   |   \n"
+    //print out board
+	std::cout   << "   |   |   \n"
 				<< "   |   |   \n"
 				<< "   |   |   \n"
 				<< "-----------\n"
@@ -228,12 +228,8 @@ void TTTGame::printBoard()
 //calls all three functions to check for possible wins
 bool TTTGame::checkForWin()
 {
-	
-	if (checkForHoriz())
-		return true;
-	else if (checkForVerts())
-		return true;
-	else if (checkForDiags())
+
+	if (checkForHoriz() || checkForVerts() || checkForDiags())
 		return true;
 	else
 		return false;
@@ -251,13 +247,14 @@ bool TTTGame::checkForHoriz()
 		oCount = 0;
 		for (int j = 0; j < 3; j++)
 		{
-			if (board[i][j] == 'X')
-			{
+			switch (board [i][j]) {
+				case 'X':
 				xCount++;
-			}
-			else if (board[i][j] == 'O')
-			{
+				break;
+
+				case 'O':
 				oCount++;
+				break;
 			}
 
 			if (xCount == 3 || oCount == 3)
@@ -282,13 +279,14 @@ bool TTTGame::checkForVerts()
 		oCount = 0;
 		for (int j = 0; j < 3; j++)
 		{
-			if (board[j][i] == 'X')
-			{
+			switch (board [j][i]) {
+				case 'X':
 				xCount++;
-			}
-			else if (board[j][i] == 'O')
-			{
+				break;
+
+				case 'O':
 				oCount++;
+				break;
 			}
 
 			if (xCount == 3 || oCount == 3)
@@ -299,6 +297,52 @@ bool TTTGame::checkForVerts()
 
 	}
 
+	return false;
+}
+
+//checks both diagonals of the board for a win
+bool TTTGame::checkForDiags()
+{
+	int xCount = 0, oCount = 0;
+
+	for (int i = 0, j = 0; i < 3, j < 3; i++, j++)
+	{
+
+		switch (board [i][j]) {
+			case 'X':
+			xCount++;
+			break;
+
+			case 'O':
+			oCount++;
+			break;
+		}
+
+		if (xCount == 3 || oCount == 3)
+		{
+			return true;
+		}
+	}
+
+	xCount = 0;
+	oCount = 0;
+	for (int i = 0, j = 2; i < 3, j >= 0; i++, j--)
+	{
+
+		if (board[i][j] == 'X')
+		{
+			xCount++;
+		}
+		else if (board[i][j] == 'O')
+		{
+			oCount++;
+		}
+
+		if (xCount == 3 || oCount == 3)
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -326,81 +370,6 @@ bool TTTGame::checkForValidCMove(int xCord, int yCord)
 	}
 	else
 		return false;
-}
-
-//checks both diagonals of the board for a win
-bool TTTGame::checkForDiags()
-{
-	int xCount = 0, oCount = 0;
-
-	for (int i = 0, j = 0; i < 3, j < 3; i++, j++)
-	{
-		
-		if (board[i][j] == 'X')
-		{
-			xCount++;
-		}
-		else if (board[i][j] == 'O')
-		{
-			oCount++;
-		}
-
-		if (xCount == 3 || oCount == 3)
-		{
-			return true;
-		}
-	}
-
-	xCount = 0;
-	oCount = 0;
-	for (int i = 0, j = 2; i < 3, j >= 0; i++, j--)
-	{
-		
-		if (board[i][j] == 'X')
-		{
-			xCount++;
-		}
-		else if (board[i][j] == 'O')
-		{
-			oCount++;
-		}
-
-		if (xCount == 3 || oCount == 3)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
-//checks if all squares of the board are taken, but there are no wins.
-bool TTTGame::checkForStalemate()
-{
-
-	int xCount = 0, oCount = 0;
-	for (int i = 0; i < 3; i++)
-	{
-		
-		for (int j = 0; j < 3; j++)
-		{
-			if (board[i][j] == 'X')
-			{
-				xCount++;
-			}
-			else if (board[i][j] == 'O')
-			{
-				oCount++;
-			}
-
-			if (xCount + oCount == 9)
-			{
-				return true;
-			}
-		}
-
-	}
-
-	return false;
 }
 
 //handles all aspects of player movement and placement
@@ -441,7 +410,7 @@ void TTTGame::compMove()
 	srand((unsigned int)time(NULL));
 	while (!valid)
 	{
-		
+
 		if (difficulty == EDiff::medium)
 		{
 			cords = mediumCompMove();
@@ -454,7 +423,7 @@ void TTTGame::compMove()
 		{
 			cords = easyCompMove();
 		}
-		
+
 		if (checkForValidCMove(cords.X, cords.Y))
 		{
 			valid = true;
@@ -465,34 +434,37 @@ void TTTGame::compMove()
 			valid = true;
 		}
 	}
-	
+
 	board[cords.X][cords.Y] = compPiece;
-	if (cords.X == 0)
-	{
+
+	switch (cords.X) {
+		case 0:
 		position.Y = 1;
-	}
-	else if (cords.X == 1)
-	{
+		break;
+
+		case 1:
 		position.Y = 5;
-	}
-	else if (cords.X = 2)
-	{
+		break;
+
+		case 2:
 		position.Y = 9;
+		break;
 	}
 
-	if (cords.Y == 0)
-	{
+	switch (cords.Y) {
+		case 0:
 		position.X = 1;
-	}
-	else if (cords.Y == 1)
-	{
+		break;
+
+		case 1:
 		position.X = 5;
-	}
-	else if (cords.Y == 2)
-	{
+		break;
+
+		case 2:
 		position.X = 9;
+		break;
 	}
-	
+
 	printPiece(position, compPiece);
 }
 
@@ -516,9 +488,37 @@ bool TTTGame::checkForStalemateMove()
 	{
 		return true;
 	}
+	else
+	{
+		return false;
+	}
 
-	return false;
+}
 
+//checks if all squares of the board are taken, but there are no wins.
+bool TTTGame::checkForStalemate()
+{
+
+	int pieceCount = 0;
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			if (board[i][j] == 'X' || board[i][j] == 'O')
+			{
+				pieceCount++;
+			}
+		}
+	}
+
+	if (pieceCount == 9)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 //finds the coordinate of the stalemate space for the computer
@@ -557,7 +557,7 @@ COORD TTTGame::easyCompMove()
 COORD TTTGame::mediumCompMove()
 {
 	COORD pos;
-	//check for block, if none, call easyCompMove
+    //check for block, if none, call easyCompMove
 	pos = checkForBlock();
 	if(pos.X == -1)
 	{ 
@@ -572,17 +572,17 @@ COORD TTTGame::mediumCompMove()
 COORD TTTGame::hardCompMove()
 {
 	COORD pos;
-	//checkForWin, if none, checkForBlock, if none, call easyCompMove
+    //checkForWin, if none, checkForBlock, if none, call easyCompMove
 	pos = checkForWinningMove();
+	if(pos.X == -1)
+	{
+		pos = checkForBlock();
 		if(pos.X == -1)
 		{
-			pos = checkForBlock();
-			if(pos.X == -1)
-			{
-				pos = easyCompMove();
-			}
+			pos = easyCompMove();
 		}
-	
+	}
+
 	return pos;
 }
 
@@ -600,7 +600,7 @@ COORD TTTGame::checkForBlock()
 			pos = checkForDiagMove(specialCase);
 		}
 	}
-	
+
 	return pos;
 }
 
@@ -609,17 +609,17 @@ COORD TTTGame::checkForWinningMove()
 {
 	EDiff specialCase = EDiff::hard;
 	COORD pos;
-	
+
 	pos = checkForHorizMove(specialCase);
 	if (pos.X == -1)
-	{			
+	{           
 		pos = checkForVertMove(specialCase);
 		if (pos.X == -1)
 		{
 			pos = checkForDiagMove(specialCase);
 		}
 	}
-	
+
 
 	return pos;
 }
@@ -629,12 +629,12 @@ COORD TTTGame::checkForHorizMove(EDiff specialCase)
 {
 	COORD pos;
 	int playerCount = 0, compCount = 0;
-	//steps through rows
+    //steps through rows
 	for (int i = 0; i < 3; i++)
 	{
 		playerCount = 0;
 		compCount = 0;
-		//steps through columns
+        //steps through columns
 		for (int j = 0; j < 3; j++)
 		{
 			if (board[i][j] == playerPiece)
@@ -646,12 +646,12 @@ COORD TTTGame::checkForHorizMove(EDiff specialCase)
 				compCount++;
 			}
 
-			//specialCase changes depending on if checkForWinningMove has already been checked or not
+            //specialCase changes depending on if checkForWinningMove has already been checked or not
 			if (specialCase == EDiff::medium)
 			{
 				if (playerCount == 2 && compCount == 0)
 				{
-					//checks if there is an empty spot to move to, if there is sets the cords for that move and returns
+                    //checks if there is an empty spot to move to, if there is sets the cords for that move and returns
 					for (int k = 0; k < 3; k++)
 					{
 						if (board[i][k] == '\0')
@@ -681,7 +681,7 @@ COORD TTTGame::checkForHorizMove(EDiff specialCase)
 
 		}
 	}
-	//if there is no block or winning move to make, sets the cords to (-1,-1), and returns them
+    //if there is no block or winning move to make, sets the cords to (-1,-1), and returns them
 	pos.X = -1;
 	pos.Y = -1;
 	return pos;
@@ -692,12 +692,12 @@ COORD TTTGame::checkForVertMove(EDiff specialCase)
 {
 	COORD pos;
 	int playerCount = 0, compCount = 0;
-	//steps through rows
+    //steps through rows
 	for (int i = 0; i < 3; i++)
 	{
 		playerCount = 0;
 		compCount = 0;
-		//steps through columns
+        //steps through columns
 		for (int j = 0; j < 3; j++)
 		{
 			if (board[j][i] == playerPiece)
@@ -709,12 +709,12 @@ COORD TTTGame::checkForVertMove(EDiff specialCase)
 				compCount++;
 			}
 
-			//specialCase changes depending on if checkForWinningMove has already been checked or not
+            //specialCase changes depending on if checkForWinningMove has already been checked or not
 			if (specialCase == EDiff::medium)
 			{
 				if (playerCount == 2 && compCount == 0)
 				{
-					//checks if there is an empty spot to move to, if there is sets the cords for that move and returns
+                    //checks if there is an empty spot to move to, if there is sets the cords for that move and returns
 					for (int k = 0; k < 3; k++)
 					{
 						if (board[k][i] == '\0')
@@ -744,7 +744,7 @@ COORD TTTGame::checkForVertMove(EDiff specialCase)
 
 		}
 	}
-	//if there is no block or winning move to make, sets the cords to (-1,-1), and returns them
+    //if there is no block or winning move to make, sets the cords to (-1,-1), and returns them
 	pos.X = -1;
 	pos.Y = -1;
 	return pos;
@@ -879,59 +879,50 @@ void TTTGame::menu()
 	int players = 0, option = 0;
 	bool diffFlag = false, menuFlag = false;
 	std::string input = "";
+
 	while (!menuFlag)
 	{
-		std::cout << "\n1. Number of Players.\n\n"
-			<< "2. Set difficulty.\n\n"
-			<< "3. Play game. (Only available if both 1 and 2 are complete, or if there is 2 players)\n\n"
-			<< "4. How to play." << std::endl;
-		
+		std::cout
+			<<  "\n1. Number of Players.\n\n"
+			<<  "2. Set difficulty.\n\n"
+			<<  "3. Play game. (Only available if both 1 and 2 are complete, or if there is 2 players)\n\n"
+			<<  "4. How to play." << std::endl;
+
 		std::cin >> input;
-		if (input.compare("1") == 0)
-		{
-			option = 1;
-		}
-		else if (input.compare("2") == 0)
-		{
-			option = 2;
-		}
-		else if (input.compare("3") == 0)
-		{
-			option = 3;
-		}
-		else if (input.compare("4") == 0)
-		{
-			option = 4;
-		}
-		else
-		{
-			std::cout << "Error, invalid input. Enter 1, 2, 3, or 4." << std::endl;
-		}
+		option = input.at (0) - '0'; // If it's '1', then '1' - '0' = int 1. 
+
 		switch (option)
 		{
-		case 1:
-			players = howManyPlayers();
+			case 1:
+				players = howManyPlayers();
 			break;
-		case 2:
-			setDifficulty();
-			diffFlag = true;
+			
+			case 2:
+				setDifficulty();
+				diffFlag = true;
 			break;
-		case 3:
-			if (players == 2)
-			{
-				return;
-			}
-			else if (players == 1 && diffFlag == true)
-			{
-				return;
-			}
-			else
-			{
-				std::cout << "Error, you must set the amount of players and the difficulty for 1 player mode first." << std::endl;
-			}
+			
+			case 3:
+				if (players == 2)
+				{
+					return;
+				}
+				else if (players == 1 && diffFlag == true)
+				{
+					return;
+				}
+				else
+				{
+					std::cout << "Error, you must set the amount of players and the difficulty for 1 player mode first." << std::endl;
+				}
 			break;
-		case 4:
-			printHowTo();
+			
+			case 4:
+				printHowTo();
+			break;
+
+			default:
+				std::cout << "Error, invalid input. Enter 1, 2, 3, or 4." << std::endl;
 		}
 	}
 }
@@ -939,8 +930,8 @@ void TTTGame::menu()
 void TTTGame::printHowTo()
 {
 	std::cout << "\nAfter selecting 1 or 2 player, and your difficulty (if playing 1 player), use the arrow keys to move"
-		<< "\nthe cursor around the screen until you find a position you would like to play, then press the spacebar.\n"
-		<< "In 2 player mode, player 1 will always choose heads or tails for the coin flip.\n" << std::endl;
+	<< "\nthe cursor around the screen until you find a position you would like to play, then press the spacebar.\n"
+	<< "In 2 player mode, player 1 will always choose heads or tails for the coin flip.\n" << std::endl;
 }
 
 //returns diffculty variable
