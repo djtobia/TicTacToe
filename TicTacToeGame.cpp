@@ -229,11 +229,7 @@ void TTTGame::printBoard()
 bool TTTGame::checkForWin()
 {
 	
-	if (checkForHoriz())
-		return true;
-	else if (checkForVerts())
-		return true;
-	else if (checkForDiags())
+	if (checkForHoriz() || checkForVerts() || checkForDiags())
 		return true;
 	else
 		return false;
@@ -251,13 +247,14 @@ bool TTTGame::checkForHoriz()
 		oCount = 0;
 		for (int j = 0; j < 3; j++)
 		{
-			if (board[i][j] == 'X')
+			switch (board[i][j])
 			{
+			case 'X':
 				xCount++;
-			}
-			else if (board[i][j] == 'O')
-			{
+				break;
+			case 'O':
 				oCount++;
+				break;
 			}
 
 			if (xCount == 3 || oCount == 3)
@@ -282,14 +279,16 @@ bool TTTGame::checkForVerts()
 		oCount = 0;
 		for (int j = 0; j < 3; j++)
 		{
-			if (board[j][i] == 'X')
+			switch(board[j][i])
 			{
+			case 'X':
 				xCount++;
-			}
-			else if (board[j][i] == 'O')
-			{
+				break;
+			case 'O':
 				oCount++;
+				break;
 			}
+			
 
 			if (xCount == 3 || oCount == 3)
 			{
@@ -299,6 +298,52 @@ bool TTTGame::checkForVerts()
 
 	}
 
+	return false;
+}
+
+//checks both diagonals of the board for a win
+bool TTTGame::checkForDiags()
+{
+	int xCount = 0, oCount = 0;
+
+	for (int i = 0, j = 0; i < 3, j < 3; i++, j++)
+	{
+		switch (board[i][j])
+		{
+		case 'X':
+			xCount++;
+			break;
+		case 'O':
+			oCount++;
+			break;
+		}
+
+		if (xCount == 3 || oCount == 3)
+		{
+			return true;
+		}
+	}
+
+	xCount = 0;
+	oCount = 0;
+	for (int i = 0, j = 2; i < 3, j >= 0; i++, j--)
+	{
+
+		switch (board[i][j])
+		{
+		case 'X':
+			xCount++;
+			break;
+		case 'O':
+			oCount++;
+			break;
+		}
+
+		if (xCount == 3 || oCount == 3)
+		{
+			return true;
+		}
+	}
 	return false;
 }
 
@@ -328,71 +373,22 @@ bool TTTGame::checkForValidCMove(int xCord, int yCord)
 		return false;
 }
 
-//checks both diagonals of the board for a win
-bool TTTGame::checkForDiags()
-{
-	int xCount = 0, oCount = 0;
-
-	for (int i = 0, j = 0; i < 3, j < 3; i++, j++)
-	{
-		
-		if (board[i][j] == 'X')
-		{
-			xCount++;
-		}
-		else if (board[i][j] == 'O')
-		{
-			oCount++;
-		}
-
-		if (xCount == 3 || oCount == 3)
-		{
-			return true;
-		}
-	}
-
-	xCount = 0;
-	oCount = 0;
-	for (int i = 0, j = 2; i < 3, j >= 0; i++, j--)
-	{
-		
-		if (board[i][j] == 'X')
-		{
-			xCount++;
-		}
-		else if (board[i][j] == 'O')
-		{
-			oCount++;
-		}
-
-		if (xCount == 3 || oCount == 3)
-		{
-			return true;
-		}
-	}
-	return false;
-}
-
 //checks if all squares of the board are taken, but there are no wins.
 bool TTTGame::checkForStalemate()
 {
 
-	int xCount = 0, oCount = 0;
+	int totalCount = 0;
 	for (int i = 0; i < 3; i++)
 	{
 		
 		for (int j = 0; j < 3; j++)
 		{
-			if (board[i][j] == 'X')
+			if (board[i][j] == 'X' || board[i][j] == 'O')
 			{
-				xCount++;
-			}
-			else if (board[i][j] == 'O')
-			{
-				oCount++;
+				totalCount++;
 			}
 
-			if (xCount + oCount == 9)
+			if (totalCount == 9)
 			{
 				return true;
 			}
@@ -467,30 +463,30 @@ void TTTGame::compMove()
 	}
 	
 	board[cords.X][cords.Y] = compPiece;
-	if (cords.X == 0)
+	switch(cords.X)
 	{
+	case 0:
 		position.Y = 1;
-	}
-	else if (cords.X == 1)
-	{
+		break;
+	case 1:
 		position.Y = 5;
-	}
-	else if (cords.X = 2)
-	{
+		break;
+	case 2:
 		position.Y = 9;
+		break;
 	}
 
-	if (cords.Y == 0)
+	switch(cords.Y)
 	{
+	case 0:
 		position.X = 1;
-	}
-	else if (cords.Y == 1)
-	{
+		break;
+	case 1:
 		position.X = 5;
-	}
-	else if (cords.Y == 2)
-	{
+		break;
+	case 2:
 		position.X = 9;
+		break;
 	}
 	
 	printPiece(position, compPiece);
@@ -887,26 +883,7 @@ void TTTGame::menu()
 			<< "4. How to play." << std::endl;
 		
 		std::cin >> input;
-		if (input.compare("1") == 0)
-		{
-			option = 1;
-		}
-		else if (input.compare("2") == 0)
-		{
-			option = 2;
-		}
-		else if (input.compare("3") == 0)
-		{
-			option = 3;
-		}
-		else if (input.compare("4") == 0)
-		{
-			option = 4;
-		}
-		else
-		{
-			std::cout << "Error, invalid input. Enter 1, 2, 3, or 4." << std::endl;
-		}
+		option = input.at(0) - '0';
 		switch (option)
 		{
 		case 1:
@@ -932,6 +909,9 @@ void TTTGame::menu()
 			break;
 		case 4:
 			printHowTo();
+			break;
+		default:
+			std::cout << "Error, invalid input. Enter 1, 2, 3, or 4." << std::endl;
 		}
 	}
 }
